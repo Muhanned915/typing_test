@@ -8,7 +8,7 @@
 #define SPACE_BETWEEN_CHARS 10
 #define LINE_X 450
 #define LINE_Y 500
-#define CURSOR_LENGTH 30
+#define CURSOR_LENGTH 40
 #define CURSOR_OFFSET 5
 #define LINE_NUM 6
 #define NXT_LINE_OFFSET_Y 50
@@ -118,7 +118,7 @@ static const char *word_list[] = {
 
 #define LINE_LENGTH 10
 #define LINE_X_PIXELS 1000
-#define DRAW_SIZE 30
+#define DRAW_SIZE 40
 
 void choose_num_of_words()
 {
@@ -168,7 +168,7 @@ void draw_test_line()
     Vector2 line_pos = {LINE_X,LINE_Y};
     for (int i = 0;i < LINE_NUM;i++){
         if(session.end_of_lines[i] == 0)    break;                                      // break loop if no address was assigned to the pointer
-        DrawTextEx(typing_font,session.end_of_lines[i],line_pos,DRAW_SIZE,SPACE_BETWEEN_CHARS,Fade(WHITE,.2f));
+        DrawTextEx(GetFontDefault(),session.end_of_lines[i],line_pos,DRAW_SIZE,SPACE_BETWEEN_CHARS,Fade(WHITE,.2f));
         line_pos.y += NXT_LINE_OFFSET_Y;
 
     }
@@ -242,7 +242,7 @@ void draw_typed_text()
         char_color = WHITE;
         key_to_send[0] = test_line[i];
        // char_width = MeasureText(key_to_send,30);
-        char_width = MeasureTextEx(typing_font,key_to_send,DRAW_SIZE,0).x;
+        char_width = MeasureTextEx(GetFontDefault(),key_to_send,DRAW_SIZE,0).x;
 
         if (session.buffer[i] != test_line[i]){
             char_color = RED;
@@ -254,7 +254,7 @@ void draw_typed_text()
                 char_position.y += NXT_LINE_OFFSET_Y;
             }
         }
-        DrawTextEx(typing_font,key_to_send,char_position,DRAW_SIZE,0,char_color);
+        DrawTextEx(GetFontDefault(),key_to_send,char_position,DRAW_SIZE,0,char_color);
         //DrawText(key_to_send, char_pos_x, char_pos_y, 30, char_color);
         char_position.x = char_position.x + char_width + SPACE_BETWEEN_CHARS;
     }
