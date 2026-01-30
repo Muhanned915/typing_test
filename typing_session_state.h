@@ -6,6 +6,7 @@ typedef struct{
     double first_delete_time, last_delete_time, first_keystroke_time, elapsed_time, wpm;
     int key_strokes,num_of_mistakes;
     bool text_ended;
+    bool text_locked;
 } typing_session_state;
 
 extern typing_session_state session;

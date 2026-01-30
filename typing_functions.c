@@ -20,6 +20,7 @@ typedef struct{
     double first_delete_time, last_delete_time, first_keystroke_time, elapsed_time, wpm;
     int key_strokes,num_of_mistakes;
     bool text_ended;
+    bool text_locked;
     char * end_of_lines [LINE_NUM];
 
 } typing_session_state;
@@ -60,7 +61,7 @@ static const char *word_list[] = {
     "work","now","may","such","give","over","think","most","even","find",
     "day","also","after","way","many","must","look","before","great","back",
     "through","long","where","much","should","well","people","down","own","just",
-    "because","good","each","those","feel","seem","how","high","too","place",
+    "because","good","each","those","feel","seem","how","high","too","place"
     "little","world","very","still","nation","hand","old","life","tell","write",
     "become","here","show","house","both","between","need","mean","call","develop",
     "under","last","right","move","thing","general","school","never","same","another",
@@ -198,7 +199,7 @@ void draw_typed_text()
     Vector2 char_position = {LINE_X,LINE_Y};
 
     for(int i = 0;i < session.len;i++){
-        char_color = WHITE;
+        char_color = GREEN;
         key_to_send[0] = test_line[i];
        // char_width = MeasureText(key_to_send,30);
         char_width = MeasureTextEx(GetFontDefault(),key_to_send,DRAW_SIZE,0).x;
@@ -265,6 +266,11 @@ void is_text_limit_reached()
        // printf("elapsed time = %f   first key time = %f",current_session.elapsed_time, current_session.first_keystroke_time);
         calculate_wpm();
     }  
+}
+
+void draw_lock()
+{
+    DrawText("Text locked",840,200,30,YELLOW);
 }
 
 
