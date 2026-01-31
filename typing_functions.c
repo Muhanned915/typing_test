@@ -13,6 +13,8 @@
 #define LINE_NUM 6
 #define NXT_LINE_OFFSET_Y 50
 #define CHARS_PER_LINE 45
+#define USER_IS_TYPING 1
+#define USER_ISNT_TYPING 0
 
 typedef struct{
     char buffer[256];
@@ -31,23 +33,12 @@ typedef struct{
     int length;
 } cursor;
 
-Font typing_font;
-
-void load_my_font()
-{
-typing_font = LoadFontEx(
-    "JetBrainsMono-Bold.ttf",
-    30,     // base font size (same as DrawTextEx)
-    NULL,   // load all glyphs
-    0
-);
-}
-
-
 typing_session_state session = {0};
 cursor cursor_1 = {(LINE_X - CURSOR_OFFSET),LINE_Y,CURSOR_LENGTH};
 char test_line [256] = {"hello world"};
 char num_of_words;
+double user_typed_time = 0;
+bool is_user_typing = false;
 
 
 static const char *word_list[] = {
@@ -156,8 +147,11 @@ void input_buffer()
 
                 session.buffer[session.len++] = my_key;
                 session.key_strokes++;
+                is_user_typing = true;
+                user_typed_time = GetTime();
             }
     }
+
     session.buffer[session.len] = '\0';                                                     // len always poits to '/0'
 }
 
@@ -191,6 +185,22 @@ void register_backspace()
     } 
 }
 
+void draw_cursor(int cursor_x,int cursor_y)
+{
+    static double last_cursor_blink_time = 0;
+    static bool render_cursor = true;
+
+    if(GetTime() - last_cursor_blink_time >= .5){
+        last_cursor_blink_time = GetTime();
+        render_cursor = !render_cursor;
+    }
+
+    if(render_cursor == true){
+        cursor_x -= 5;
+        DrawLine(cursor_x, cursor_y, cursor_x, (cursor_y + CURSOR_LENGTH),WHITE);
+    }
+}
+
 void draw_typed_text()
 {
     char key_to_send[2] = {'\0','\0'};
@@ -218,8 +228,19 @@ void draw_typed_text()
         //DrawText(key_to_send, char_pos_x, char_pos_y, 30, char_color);
         char_position.x = char_position.x + char_width + SPACE_BETWEEN_CHARS;
     }
-    char_position.x -= 5;
-    DrawLine(char_position.x, char_position.y, char_position.x, (char_position.y + CURSOR_LENGTH),WHITE);
+    //draw_cursor(char_position.x,char_position.y);
+
+    if(GetTime() - user_typed_time >= .5){
+        is_user_typing = false;
+    }
+
+    if(is_user_typing == false){
+        draw_cursor(char_position.x,char_position.y);
+    }
+    else if(is_user_typing == true){
+        char_position.x -= 5;
+        DrawLine(char_position.x, char_position.y, char_position.x, (char_position.y + CURSOR_LENGTH),WHITE);
+    }
 }
 
 

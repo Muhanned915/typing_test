@@ -11,6 +11,5 @@ double calculate_wpm(void);
 void init_text(void);
 void draw_test_line(void);
 void find_end_of_lines();
-void load_my_font();
 void draw_lock();
 #endif

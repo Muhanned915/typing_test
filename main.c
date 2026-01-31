@@ -29,7 +29,6 @@ int main(void)
     SetTraceLogLevel(LOG_NONE);
 
     srand(time(NULL));
-    load_my_font();
     init_text();
     find_end_of_lines();
     
