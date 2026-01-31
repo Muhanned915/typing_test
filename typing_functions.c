@@ -39,6 +39,7 @@ char test_line [256] = {"hello world"};
 char num_of_words;
 double user_typed_time = 0;
 bool is_user_typing = false;
+bool restart_blink_function = false;
 
 
 static const char *word_list[] = {
@@ -188,7 +189,13 @@ void register_backspace()
 void draw_cursor(int cursor_x,int cursor_y)
 {
     static double last_cursor_blink_time = 0;
-    static bool render_cursor = true;
+    static bool render_cursor = false;
+
+    if(restart_blink_function == true){
+        render_cursor = false;
+        last_cursor_blink_time = GetTime();
+        restart_blink_function = false;
+    }
 
     if(GetTime() - last_cursor_blink_time >= .5){
         last_cursor_blink_time = GetTime();
@@ -240,8 +247,14 @@ void draw_typed_text()
     else if(is_user_typing == true){
         char_position.x -= 5;
         DrawLine(char_position.x, char_position.y, char_position.x, (char_position.y + CURSOR_LENGTH),WHITE);
+        restart_blink_function = true;
     }
 }
+
+
+
+
+
 
 
 /*void draw_typed_text()
