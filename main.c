@@ -10,7 +10,7 @@
 #define LINE_Y 500
 
 Vector2 line_pos = {LINE_X,LINE_Y};
-Vector2 ff;
+Vector2 cursor_pos;
 extern const char test_line [256];
 
 
@@ -71,7 +71,8 @@ int main(void)
             draw_test_line();
             input_buffer();
             register_backspace();
-            draw_typed_text();
+            cursor_pos = draw_typed_text();
+            draw_cursor(cursor_pos.x,cursor_pos.y);
             if(session.text_locked == true)     draw_lock();
         }
 
