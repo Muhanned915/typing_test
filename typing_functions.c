@@ -15,7 +15,7 @@
 #define CHARS_PER_LINE 45
 #define USER_IS_TYPING 1
 #define USER_ISNT_TYPING 0
-#define CURSOR_BLINK_TIME 1
+#define CURSOR_BLINK_TIME .5
 
 typedef struct{
     char buffer[256];
