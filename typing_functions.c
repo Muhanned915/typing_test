@@ -256,22 +256,16 @@ void blink_cursor(int cursor_x,int cursor_y,double now)
 void draw_cursor(int cursor_x,int cursor_y)
 {
     double now = GetTime();
-    static char i = 0;
     cursor_x -= 5;
     if(now - user_typed_time >= CURSOR_BLINK_TIME){
         user_typed = false;
     }
 
     if(user_typed == false){
-        if (i == 0){
-             printf("now = %f ut_time = %f\n",now,user_typed_time);
-             i = 1;
-        }
         blink_cursor(cursor_x,cursor_y,now);
     }
 
     else if(user_typed == true){
-        i = 0;
         DrawLine(cursor_x, cursor_y, cursor_x, (cursor_y + CURSOR_LENGTH),WHITE);
     }
 }
