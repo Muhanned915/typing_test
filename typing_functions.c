@@ -15,7 +15,7 @@
 #define CHARS_PER_LINE 45
 #define USER_IS_TYPING 1
 #define USER_ISNT_TYPING 0
-#define CURSOR_BLINK_TIME .5
+#define CURSOR_BLINK_TIME 1
 
 typedef struct{
     char buffer[256];
@@ -54,7 +54,7 @@ static const char *word_list[] = {
     "work","now","may","such","give","over","think","most","even","find",
     "day","also","after","way","many","must","look","before","great","back",
     "through","long","where","much","should","well","people","down","own","just",
-    "because","good","each","those","feel","seem","how","high","too","place"
+    "because","good","each","those","feel","seem","how","high","too","place",
     "little","world","very","still","nation","hand","old","life","tell","write",
     "become","here","show","house","both","between","need","mean","call","develop",
     "under","last","right","move","thing","general","school","never","same","another",
@@ -132,6 +132,15 @@ void get_text_length()
     session.max_buffer_length = strlen(test_line);                                     
 }
 
+void register_action()
+{
+    if(user_typed == false){
+        user_typed = true;
+        restart_blink_function = true;
+    }
+    user_typed_time = GetTime();
+}
+
 void input_buffer()
 {
     char my_key;
@@ -151,11 +160,8 @@ void input_buffer()
                 session.buffer[session.len++] = my_key;
                 session.key_strokes++;
 
-                if(user_typed == false){
-                    user_typed = true;
-                    restart_blink_function = true;
-                    user_typed_time = GetTime();
-                }
+                register_action();
+                
             }
     }
 
@@ -171,6 +177,8 @@ void register_backspace()
         
             while(session.len > 0 && session.buffer[session.len - 1] != ' ')
                 session.buffer[--session.len] = '\0';
+
+            register_action();
         }
     }
 
@@ -187,12 +195,11 @@ void register_backspace()
                 session.buffer[--session.len] = '\0';
                 session.last_delete_time = GetTime();
                 }   
-            }          
+            }
+            register_action();
         }
     } 
 }
-
-
 
 Vector2 draw_typed_text()
 {
@@ -249,16 +256,22 @@ void blink_cursor(int cursor_x,int cursor_y,double now)
 void draw_cursor(int cursor_x,int cursor_y)
 {
     double now = GetTime();
+    static char i = 0;
     cursor_x -= 5;
     if(now - user_typed_time >= CURSOR_BLINK_TIME){
         user_typed = false;
     }
 
     if(user_typed == false){
+        if (i == 0){
+             printf("now = %f ut_time = %f\n",now,user_typed_time);
+             i = 1;
+        }
         blink_cursor(cursor_x,cursor_y,now);
     }
 
     else if(user_typed == true){
+        i = 0;
         DrawLine(cursor_x, cursor_y, cursor_x, (cursor_y + CURSOR_LENGTH),WHITE);
     }
 }

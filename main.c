@@ -25,7 +25,6 @@ int main(void)
     SetTraceLogLevel(LOG_NONE);
     InitWindow(screenWidth, screenHeight, "Fullscreen Windowed");
     MaximizeWindow();
-    SetTargetFPS(60);
     SetTraceLogLevel(LOG_NONE);
 
     srand(time(NULL));
@@ -37,6 +36,7 @@ int main(void)
     {
         BeginDrawing();
         ClearBackground(BLACK);
+        DrawFPS(10,10);
 
         if(IsKeyPressed(KEY_LEFT_SHIFT)){
             session.text_locked = !session.text_locked;
